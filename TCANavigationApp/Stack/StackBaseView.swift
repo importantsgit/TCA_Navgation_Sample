@@ -17,11 +17,15 @@ struct StackBaseView: View {
             List {
                 Button("first") {
                     // 1. Store에서 처리하는 방법
-                    store.send(.firstButtonTapped)
+                    store.send(.push(.first(.init())))
                 }
                 // 2. View에서 처리하는 방법 (모듈화가 되지 않기 때문에 추천하지 않음)
-                NavigationLink(state: Path.State.second(.init())) {
+                NavigationLink(state: StackBaseFeature.Path.State.second(.init())) {
                     Text("second")
+                }
+                // 자식 뷰에서 자식 뷰로 이동할 수 있는 뷰
+                Button("stackChild") {
+                    store.send(.push(.stackChild(.init())))
                 }
             }
         } destination: { store in
@@ -31,6 +35,9 @@ struct StackBaseView: View {
                 
             case .second(let store):
                 ChildSecondView(store: store)
+                
+            case .stackChild(let store):
+                StackChildView(store: store)
             }
         }
     }

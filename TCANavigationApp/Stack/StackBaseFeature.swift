@@ -16,8 +16,7 @@ struct StackBaseFeature {
     }
     
     enum Action {
-        case firstButtonTapped
-        
+        case push(Path.State)
         case path(StackActionOf<Path>)
     }
     
@@ -26,10 +25,11 @@ struct StackBaseFeature {
         // RootFeature(StackVaseFeature)의 Core 로직
         Reduce { state, action in
             switch action {
-            case .firstButtonTapped:
-                state.path.append(.first(.init()))
+            case let .push(path):
+                state.path.append(path)
                 return .none
                 
+                // 자식 Store의 액션을 받는 방법
             case let .path(.element(id: id, action: .first(.delegate(.confirm(value))))):
                 print("first", id, value)
                 return .none
@@ -48,10 +48,19 @@ struct StackBaseFeature {
         }
         .forEach(\.path, action: \.path) // 배열 내의 모든 path의 Store Scope를 제공
     }
+    
+    @Reducer
+    enum Path {
+        case first(ChildFirstFeature)
+        case second(ChildSecondFeature)
+        case stackChild(StackChildFeature)
+    }
 }
 
-@Reducer
-enum Path {
-    case first(ChildFirstFeature)
-    case second(ChildSecondFeature)
+@Reducer struct PathFirstFeature {
+    @ObservableState
+    struct State {
+        
+    }
 }
+

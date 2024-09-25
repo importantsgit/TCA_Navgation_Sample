@@ -18,14 +18,13 @@ struct TCANavigationApp: App {
     
     var body: some Scene {
         WindowGroup {
-            // TreeBase (Presenting)
-            // 2. 직접 집어넣는 방법 (뷰 생명주기)
-            TreeBaseView(store: Store(initialState: TreeBaseFeature.State()) {
-                TreeBaseFeature()
-            })
-            
             // StackBase (navigation)
             StackBaseView(store: TCANavigationApp.stackBaseStore)
         }
     }
 }
+
+/*
+ important
+ 자식뷰(A) 내에서 자식뷰(B)로 push가 가능하지만, B에서 A로 데이터를 전달하는 방법은 아직 찾지 못했습니다.
+ */
